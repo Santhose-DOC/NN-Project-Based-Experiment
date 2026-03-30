@@ -28,9 +28,63 @@ If the model is not performing well, experiment with different architectures, re
 Visualize the training/validation loss and accuracy over epochs to understand the training process. Visualize some misclassified examples to gain insights into potential improvements.
 
 # Program:
-Insert your code here
+```python
+
+import tensorflow as tf
+from tensorflow import keras
+import numpy as np
+import matplotlib.pyplot as plt
+
+# 1. Load dataset
+(x_train, y_train), (x_test, y_test) = keras.datasets.mnist.load_data()
+
+# 2. Preprocess data
+x_train = x_train / 255.0
+x_test = x_test / 255.0
+
+# Flatten images (28x28 → 784)
+x_train = x_train.reshape(-1, 784)
+x_test = x_test.reshape(-1, 784)
+
+# 3. Build MLP model
+model = keras.Sequential([
+    keras.layers.Dense(128, activation='relu', input_shape=(784,)),
+    keras.layers.Dense(64, activation='relu'),
+    keras.layers.Dense(10, activation='softmax')
+])
+
+# 4. Compile model
+model.compile(
+    optimizer='adam',
+    loss='sparse_categorical_crossentropy',
+    metrics=['accuracy']
+)
+
+# 5. Train model
+model.fit(x_train, y_train, epochs=10, batch_size=32, validation_split=0.1)
+
+# 6. Evaluate model
+test_loss, test_acc = model.evaluate(x_test, y_test)
+print("Test Accuracy:", test_acc)
+
+# 7. Make predictions
+predictions = model.predict(x_test)
+
+# Show prediction for first image
+print("Predicted:", np.argmax(predictions[0]))
+print("Actual:", y_test[0])
+
+# 8. Display image
+plt.imshow(x_test[0].reshape(28, 28), cmap='gray')
+plt.title(f"Predicted: {np.argmax(predictions[0])}")
+plt.show()
+
+```
 
 ## Output:
-Show your results here
 
+<img width="539" height="538" alt="image" src="https://github.com/user-attachments/assets/003fcc65-13f9-4b70-a100-0c45e7522187" />
+
+## Result:
+Thus, built a Multilayer Perceptron (MLP) to classify handwritten digits in python
 
